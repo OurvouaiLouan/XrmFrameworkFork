@@ -1,6 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using XrmFramework.Core;
+using XrmFramework.RemoteDebugger.Converters;
 
 namespace XrmFramework.Analyzers.Generators;
 
@@ -35,7 +37,6 @@ public abstract class BaseTableDefinitionGenerator : IIncrementalGenerator
 				foreach (var tuple in tablesValues)
 				{
 					var table = JsonConvert.DeserializeObject<Table>(tuple.content);
-
 					tables.Add(table);
 				}
 

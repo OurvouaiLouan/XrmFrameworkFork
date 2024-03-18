@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk.Workflow;
 using Newtonsoft.Json;
@@ -24,7 +23,7 @@ namespace XrmFramework.RemoteDebugger.Converters
 
         public override DataCollection<TKey, TValue> ReadJson(JsonReader reader, Type objectType, DataCollection<TKey, TValue> existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            var retour = (DataCollection<TKey, TValue>)Activator.CreateInstance(objectType);
+            var retour = (DataCollection<TKey, TValue>) Activator.CreateInstance(objectType);
 
             var list = serializer.Deserialize<List<KeyValuePair<TKey, TValue>>>(reader);
 

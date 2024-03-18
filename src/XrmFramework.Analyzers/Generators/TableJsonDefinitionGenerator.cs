@@ -14,10 +14,6 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 	{
 		var sb = new IndentedStringBuilder();
 		
-		if (!table.Columns.Any())
-		{
-			return;
-		}
 
 		WriteHeaders(sb);
 
@@ -30,7 +26,14 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 			sb.AppendLine("Columns : {");
 			using (sb.Indent())
 			{
-				foreach (var col in table.Columns)
+				/*
+                if (!table.Columns.Any())
+                {
+                    return;
+                }
+				*/
+
+                foreach (var col in table.Columns)
 				{
 					WriteColumn(sb, col);
 				}

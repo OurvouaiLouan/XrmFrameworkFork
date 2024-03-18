@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using XrmFramework.Analyzers.Generators;
 using Xunit;
 
@@ -17,5 +18,7 @@ public class TableJsonDefinitionGeneratorTests
 			("Account.table", TableFiles.Account)
 			);
 
-	}
+		Console.Read();
+
+    }
 }
