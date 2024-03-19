@@ -34,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <Compile Include="..\XrmFramework.Plugin\RemoteDebugger\Converters\ColumnCollectionConverter.cs" Link="_Imports\XrmFramework.Plugin\RemoteDebugger\Converters\ColumnCollectionConverter.cs" />
 	  <Compile Include="..\XrmFramework\Utils\SdkEnums.cs" Link="SdkEnums.cs" />
   </ItemGroup>
 
