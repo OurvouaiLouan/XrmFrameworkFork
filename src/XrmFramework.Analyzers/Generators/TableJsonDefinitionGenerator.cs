@@ -64,7 +64,7 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 		{
 			foreach (var value in optionSetEnum.Values)
 			{
-				sb.AppendLine($"{value.Name} : \"{value.Value}\",");
+				sb.AppendLine($"{value.Name} : {value.Value},");
 			}
 		}
 		sb.AppendLine("},");
