@@ -18,7 +18,5 @@ public class TableJsonDefinitionGeneratorTests
 			("Account.table", TableFiles.Account)
 			);
 
-		Console.Read();
-
     }
 }
