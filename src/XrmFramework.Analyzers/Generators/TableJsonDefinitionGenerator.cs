@@ -23,7 +23,7 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 		{
 			WriteEntityMetadata(sb, table);
 
-			sb.AppendLine("Columns : {");
+			sb.AppendLine("Columns: {");
 			using (sb.Indent())
 			{
 				/*
@@ -40,7 +40,7 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 			}
 			sb.AppendLine("},");
 
-			sb.AppendLine("Enums : {");
+			sb.AppendLine("Enums: {");
 			using (sb.Indent())
 			{
 				foreach (var optionSetEnum in table.Enums)
@@ -48,7 +48,8 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 					WriteEnum(sb, optionSetEnum);
 				}
 			}
-		}
+            sb.AppendLine("},");
+        }
 
 		sb.AppendLine("};");
 		
@@ -59,12 +60,18 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 
 	private void WriteEnum(IndentedStringBuilder sb, OptionSetEnum optionSetEnum)
 	{
-		sb.AppendLine($"{optionSetEnum.Name} : {{");
+		sb.AppendLine($"{optionSetEnum.Name}: {{");
+		List<string> nameUse = new List<string>();
 		using (sb.Indent())
 		{
 			foreach (var value in optionSetEnum.Values)
 			{
-				sb.AppendLine($"{value.Name} : {value.Value},");
+				string name = AvoidWordThatBeginByANumber(DeleteCharacter(value.Name, ';'));
+				int nameTimeUsed = HowManyTimeThisWordIsInList(name, nameUse);
+				nameUse.Add(name);
+
+				if (nameTimeUsed != 0) name = name + nameTimeUsed.ToString();
+                sb.AppendLine($"{name}: {value.Value},");
 			}
 		}
 		sb.AppendLine("},");
@@ -72,17 +79,17 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 
 	private void WriteColumn(IndentedStringBuilder sb, Column col)
 	{
-		sb.AppendLine($"{col.Name} : \"{col.LogicalName}\",");
+		sb.AppendLine($"{col.Name}: \"{col.LogicalName}\",");
 	}
 
 	private void WriteEntityMetadata(IndentedStringBuilder sb, Table table)
 	{
-		sb.AppendLine($"LogicalName = \"{table.LogicalName}\",");
-		sb.AppendLine($"SchemaName = \"{table.Name}\",");
-		sb.AppendLine($"CollectionName : \"{table.CollectionName}\",");
-		sb.AppendLine($"LogicalCollectionName : \"{table.CollectionName}\",");
-		sb.AppendLine($"PrimaryIdAttribute : \"{table.Columns.FirstOrDefault(c => c.PrimaryType   == PrimaryType.Id)?.LogicalName}\",");
-		sb.AppendLine($"PrimaryNameAttribute : \"{table.Columns.FirstOrDefault(c => c.PrimaryType == PrimaryType.Name)?.LogicalName}\",");
+		sb.AppendLine($"LogicalName: \"{table.LogicalName}\",");
+		sb.AppendLine($"SchemaName: \"{table.Name}\",");
+		sb.AppendLine($"CollectionName: \"{table.CollectionName}\",");
+		sb.AppendLine($"LogicalCollectionName: \"{table.CollectionName}\",");
+		sb.AppendLine($"PrimaryIdAttribute: \"{table.Columns.FirstOrDefault(c => c.PrimaryType   == PrimaryType.Id)?.LogicalName}\",");
+		sb.AppendLine($"PrimaryNameAttribute: \"{table.Columns.FirstOrDefault(c => c.PrimaryType == PrimaryType.Name)?.LogicalName}\",");
 	}
 
 	private void WriteHeaders(IndentedStringBuilder sb)
@@ -98,8 +105,8 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 	{
 		sb.AppendLine("/// <summary>");
 		sb.AppendLine("/// ");
-		sb.AppendLine($"/// Type : {col.Type}{(optionSetEnum == null ? "" : " (" + optionSetEnum.Name + ")")}");
-		sb.Append("/// Validity :  ");
+		sb.AppendLine($"/// Type: {col.Type}{(optionSetEnum == null ? "" : " (" + optionSetEnum.Name + ")")}");
+		sb.Append("/// Validity:  ");
 
 		var isFirst = true;
 		if ((col.Capabilities & AttributeCapabilities.Read) != AttributeCapabilities.None)
@@ -221,5 +228,49 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 
 			sb.AppendLine("}");
 		}
+	}
+
+	private string DeleteCharacter(string word, char letterToDelete)
+	{
+		if (word == String.Empty) return word;
+		string[] list = word.Split(letterToDelete);
+		return string.Concat(list);
+	}
+
+
+    private string AvoidWordThatBeginByANumber(string word)
+	{
+		if (word == String.Empty) return word;
+		if (word == null) return null;
+		int i = 0;
+		if (int.TryParse(word.Substring(0,1), out i)) return "_"+word;
+		else return word;
+	}
+
+    private string AvoidWordThatBeginByASubWord(string word, string subWord)
+    {
+        if (word == String.Empty) 
+			return word;
+        if (word == null) 
+			return null;
+		if(word.Length < subWord.Length) 
+			return word;
+        
+		if(word.Substring(0, subWord.Length)  == subWord) 
+			return word.Substring(subWord.Length);
+		
+		return word;
+
+    }
+
+	private int HowManyTimeThisWordIsInList(string word, List<string> list)
+	{
+		if(list.Count == 0) return 0;
+		return list.FindAll(
+			delegate(string element)
+			{
+				return element == word;
+			}
+			).Count;
 	}
 }

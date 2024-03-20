@@ -17,10 +17,23 @@ public class TableJsonDefinitionGeneratorTests
 
 ";
 
-		// Pass the source code to our helper and snapshot test the output
-		await TestHelper.Verify<TableJsonDefinitionGenerator>(source,
-			("Account.table", TableFiles.Account)
-			);
+        // Pass the source code to our helper and snapshot test the output
+
+        /*await TestHelper.Verify<TableJsonDefinitionGenerator>(source,
+            ("Account.table", TableFiles.Account)
+            );*/
+
+        /*await TestHelper.Verify<TableJsonDefinitionGenerator>(source,
+            ("Contratdelocation.table", TableFiles.Contratdelocation)
+            );*/
+
+        await TestHelper.Verify<TableJsonDefinitionGenerator>(source,
+            ("OptionSet.table", TableFiles.OptionSet)
+            );
+
+        /*await TestHelper.Verify<TableJsonDefinitionGenerator>(source,
+            ("Particulier.table", TableFiles.Particulier)
+            );*/
 
     }
 }
