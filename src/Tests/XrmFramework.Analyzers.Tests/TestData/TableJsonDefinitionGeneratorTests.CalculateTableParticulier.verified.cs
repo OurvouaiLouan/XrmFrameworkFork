@@ -13,16 +13,16 @@ const ftp_particulierDefinition = {
     Columns: {
         Budgetparmois: "ftp_budgetparmois",
         Name: "ftp_name",
-        Id: "ftp_particulierid",
+        Id: "ftp_particulierid"
     },
     Enums: {
         ParticulierState: {
             Actif: 0,
-            Inactif: 1,
+            Inactif: 1
         },
         ParticulierStatus: {
             Actif: 1,
-            Inactif: 2,
-        },
-    },
+            Inactif: 2
+        }
+    }
 };

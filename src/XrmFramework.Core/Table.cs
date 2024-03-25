@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using XrmFramework.RemoteDebugger.Converters;
 
 namespace XrmFramework.Core
 {
@@ -19,7 +18,6 @@ namespace XrmFramework.Core
         public string CollectionName { get; set; }
 
         [JsonProperty("Cols")]
-        [JsonConverter(typeof(ColumnCollectionConverter))]
         public ColumnCollection Columns { get; } = new();
         
         [JsonProperty("NtoN")]

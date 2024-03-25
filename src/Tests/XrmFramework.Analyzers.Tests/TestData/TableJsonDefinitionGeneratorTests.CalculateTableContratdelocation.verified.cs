@@ -15,16 +15,16 @@ const ftp_contratdelocationDefinition = {
         Id: "ftp_contratdelocationid",
         Locataire: "ftp_locataire",
         Loyer: "ftp_loyer",
-        Name: "ftp_name",
+        Name: "ftp_name"
     },
     Enums: {
         ContratdelocationState: {
             Actif: 0,
-            Inactif: 1,
+            Inactif: 1
         },
         ContratdelocationStatus: {
             Actif: 1,
-            Inactif: 2,
-        },
-    },
+            Inactif: 2
+        }
+    }
 };

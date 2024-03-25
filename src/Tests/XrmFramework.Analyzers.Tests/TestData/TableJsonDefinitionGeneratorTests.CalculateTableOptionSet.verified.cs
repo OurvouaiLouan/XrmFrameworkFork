@@ -14,11 +14,11 @@ const globalEnumsDefinition = {
     },
     Enums: {
         SynapseLinkProfileEntityType: {
-            Requested: 0,
+            Requested: 0
         },
         SynapseLinkScheduleType: {
             Snapshot: 0,
-            Incrementalupdate: 1,
-        },
-    },
+            Incrementalupdate: 1
+        }
+    }
 };

@@ -4,7 +4,7 @@ using XrmFramework.Core;
 
 namespace XrmFramework.Analyzers.Generators;
 
-[Generator]
+[Generator("json")]
 public abstract class BaseTableDefinitionGenerator : IIncrementalGenerator
 {
 	protected abstract bool GenerateTableFiles { get; }

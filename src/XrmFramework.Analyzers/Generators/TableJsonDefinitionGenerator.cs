@@ -1,4 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
 using XrmFramework.Core;
@@ -13,9 +15,12 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 	protected override void WriteTable(SourceProductionContext productionContext, TableCollection tables, Table table, HashSet<string> alreadyCreatedEnums)
 	{
 		var sb = new IndentedStringBuilder();
-		
 
-		WriteHeaders(sb);
+		int count;
+
+
+
+        WriteHeaders(sb);
 
 		sb.AppendLine($"const {table.LogicalName}Definition = {{");
 
@@ -32,10 +37,11 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
                     return;
                 }
 				*/
-
+				count = 0;
                 foreach (var col in table.Columns)
 				{
-					WriteColumn(sb, col);
+					count++;
+					WriteColumn(sb, col, count != table.Columns.Count);
 				}
 			}
 			sb.AppendLine("},");
@@ -43,43 +49,58 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 			sb.AppendLine("Enums: {");
 			using (sb.Indent())
 			{
+				count = 0;
 				foreach (var optionSetEnum in table.Enums)
 				{
-					WriteEnum(sb, optionSetEnum);
+                    count++;
+                    WriteEnum(sb, optionSetEnum, count != table.Enums.Count);
 				}
 			}
-            sb.AppendLine("},");
+            sb.AppendLine("}");
         }
 
 		sb.AppendLine("};");
-		
-		//On crée le chemin pour cette table
 
-		productionContext.AddSource($"{table.Name}Definition.json", sb.ToString());
+
+        //On crée le chemin pour cette table
+        productionContext.AddSource($"{table.Name}Definition.json", SourceText.From(sb.ToString(),System.Text.Encoding.UTF8));
 	}
 
-	private void WriteEnum(IndentedStringBuilder sb, OptionSetEnum optionSetEnum)
+	private void WriteEnum(IndentedStringBuilder sb, OptionSetEnum optionSetEnum, bool withComa)
 	{
 		sb.AppendLine($"{optionSetEnum.Name}: {{");
 		List<string> nameUse = new List<string>();
 		using (sb.Indent())
 		{
+			int count = 0;
 			foreach (var value in optionSetEnum.Values)
 			{
+				count++;
 				string name = AvoidWordThatBeginByANumber(DeleteCharacter(value.Name, ';'));
 				int nameTimeUsed = HowManyTimeThisWordIsInList(name, nameUse);
 				nameUse.Add(name);
 
 				if (nameTimeUsed != 0) name = name + nameTimeUsed.ToString();
-                sb.AppendLine($"{name}: {value.Value},");
-			}
-		}
-		sb.AppendLine("},");
-	}
 
-	private void WriteColumn(IndentedStringBuilder sb, Column col)
+				if(count == optionSetEnum.Values.Count)
+					sb.AppendLine($"{name}: {value.Value}");
+				else
+                    sb.AppendLine($"{name}: {value.Value},");
+            }
+		}
+		if(withComa)
+            sb.AppendLine("},");
+        else
+            sb.AppendLine("}");
+
+    }
+
+	private void WriteColumn(IndentedStringBuilder sb, Column col, bool withComa)
 	{
-		sb.AppendLine($"{col.Name}: \"{col.LogicalName}\",");
+		if(withComa)
+            sb.AppendLine($"{col.Name}: \"{col.LogicalName}\",");
+        else
+			sb.AppendLine($"{col.Name}: \"{col.LogicalName}\"");
 	}
 
 	private void WriteEntityMetadata(IndentedStringBuilder sb, Table table)
