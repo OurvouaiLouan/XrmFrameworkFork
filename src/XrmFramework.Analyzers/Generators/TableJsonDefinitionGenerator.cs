@@ -16,7 +16,7 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 	{
 		var sb = new IndentedStringBuilder();
 
-
+		sb.AppendLine("#if COMPILE_JSON");
 
         WriteHeaders(sb);
 
@@ -81,6 +81,8 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
         }
 
 		sb.AppendLine("};");
+		
+		sb.AppendLine("#endif");
 
 
         //On crée le chemin pour cette table
