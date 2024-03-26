@@ -16,8 +16,6 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 	{
 		var sb = new IndentedStringBuilder();
 
-		int count;
-
 
 
         WriteHeaders(sb);
@@ -28,34 +26,57 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 		{
 			WriteEntityMetadata(sb, table);
 
-			sb.AppendLine("Columns: {");
+
+            if (table.Columns.Any())
+			{
+
+			
+                sb.AppendLine("Columns: {");
 			using (sb.Indent())
 			{
-				/*
-                if (!table.Columns.Any())
-                {
-                    return;
-                }
-				*/
-				count = 0;
-                foreach (var col in table.Columns)
-				{
-					count++;
-					WriteColumn(sb, col, count != table.Columns.Count);
-				}
-			}
-			sb.AppendLine("},");
+				var columns = table.Columns
+					.Select(ToStringColumn)
+					.ToList();
+
+				columns.Take(columns.Count - 1)
+					.ToList()
+					.ForEach(c => sb.AppendLine(c));
+
+				var lastColumn = columns.Last();
+
+				sb.AppendLine(lastColumn.TrimEnd(','));
+
+     //           if (table.Columns.Any())
+     //           {
+  			//		var sbColumn = new IndentedStringBuilder();
+					//foreach (var col in table.Columns)
+     //               {
+     //                   WriteColumn(sbColumn, col);
+     //               }
+					//var columns = sbColumn.ToString().TrimEnd(',');
+					//sbColumn.
+					//sb.AppendLine(columns);
+     //           }
+            }
+            }
+
+            sb.AppendLine("},");
 
 			sb.AppendLine("Enums: {");
 			using (sb.Indent())
 			{
-				count = 0;
 				foreach (var optionSetEnum in table.Enums)
 				{
-                    count++;
-                    WriteEnum(sb, optionSetEnum, count != table.Enums.Count);
-				}
-			}
+
+					sb = WriteEnum(sb, optionSetEnum);
+
+                }
+
+                DeleteLastComa(sb,2);
+            }
+
+
+
             sb.AppendLine("}");
         }
 
@@ -65,42 +86,38 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
         //On crée le chemin pour cette table
         productionContext.AddSource($"{table.Name}Definition.json", SourceText.From(sb.ToString(),System.Text.Encoding.UTF8));
 	}
+	private string ToStringColumn(Column col)
+	{
+		return $"{col.Name}: \"{col.LogicalName}\",";
 
-	private void WriteEnum(IndentedStringBuilder sb, OptionSetEnum optionSetEnum, bool withComa)
+    }
+	private IndentedStringBuilder WriteEnum(IndentedStringBuilder sb, OptionSetEnum optionSetEnum)
 	{
 		sb.AppendLine($"{optionSetEnum.Name}: {{");
-		List<string> nameUse = new List<string>();
+
+
+        List<string> nameUse = new List<string>();
 		using (sb.Indent())
 		{
-			int count = 0;
 			foreach (var value in optionSetEnum.Values)
 			{
-				count++;
-				string name = AvoidWordThatBeginByANumber(DeleteCharacter(value.Name, ';'));
-				int nameTimeUsed = HowManyTimeThisWordIsInList(name, nameUse);
-				nameUse.Add(name);
+				string name = ParseName(value.Name);
 
-				if (nameTimeUsed != 0) name = name + nameTimeUsed.ToString();
-
-				if(count == optionSetEnum.Values.Count)
-					sb.AppendLine($"{name}: {value.Value}");
-				else
-                    sb.AppendLine($"{name}: {value.Value},");
+				sb.AppendLine($"{name}: {value.Value},");
             }
-		}
-		if(withComa)
-            sb.AppendLine("},");
-        else
-            sb.AppendLine("}");
+
+
+            DeleteLastComa(sb,3);
+        }
+        sb.AppendLine("},");
+
+		return sb;
 
     }
 
-	private void WriteColumn(IndentedStringBuilder sb, Column col, bool withComa)
+	private void WriteColumn(IndentedStringBuilder sb, Column col)
 	{
-		if(withComa)
-            sb.AppendLine($"{col.Name}: \"{col.LogicalName}\",");
-        else
-			sb.AppendLine($"{col.Name}: \"{col.LogicalName}\"");
+		sb.AppendLine($"{col.Name}: \"{col.LogicalName}\",");
 	}
 
 	private void WriteEntityMetadata(IndentedStringBuilder sb, Table table)
@@ -121,177 +138,59 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 		sb.AppendLine(" */");
 	}
 
-
-	private void AddColumnSummary(IndentedStringBuilder sb, Column col, OptionSetEnum? optionSetEnum)
+	private string ParseAllCharacterOfAWord(string word, string valideCharacters)
 	{
-		sb.AppendLine("/// <summary>");
-		sb.AppendLine("/// ");
-		sb.AppendLine($"/// Type: {col.Type}{(optionSetEnum == null ? "" : " (" + optionSetEnum.Name + ")")}");
-		sb.Append("/// Validity:  ");
+		if ( String.IsNullOrEmpty(word)) return word;
 
-		var isFirst = true;
-		if ((col.Capabilities & AttributeCapabilities.Read) != AttributeCapabilities.None)
-		{
-			isFirst = false;
-			sb.Append("Read ");
-		}
+		string finalWord = string.Concat(
+			word
+			.Where(charac => valideCharacters.Contains(charac))
+			);
 
-		if ((col.Capabilities & AttributeCapabilities.Create) != AttributeCapabilities.None)
-		{
-			if (isFirst)
-				isFirst = false;
-			else
-				sb.Append("| ");
-			sb.Append("Create ");
-		}
-
-		if ((col.Capabilities & AttributeCapabilities.Update) != AttributeCapabilities.None)
-		{
-			if (isFirst)
-				isFirst = false;
-			else
-				sb.Append("| ");
-			sb.Append("Update ");
-		}
-
-		if ((col.Capabilities & AttributeCapabilities.AdvancedFind) != AttributeCapabilities.None)
-		{
-			if (!isFirst) sb.Append("| ");
-
-			sb.Append("AdvancedFind ");
-		}
-
-		sb.AppendLine();
-
-		sb.AppendLine("/// </summary>");
-	}
-
-	private void AddRelations(IndentedStringBuilder sb, TableCollection tables, Table table, List<Relation> relations,
-	                          string relationType)
-	{
-		if (relations.Any())
-		{
-			sb.AppendLine($"public static class {relationType}");
-			sb.AppendLine("{");
-			using (sb.Indent())
-			{
-				foreach (var relationship in relations)
-				{
-					if (relationType != "ManyToOneRelationships")
-						if (!tables.Any(t => t.LogicalName == relationship.EntityName))
-							continue;
-					sb.Append("[Relationship(");
-					var targetTable = tables.FirstOrDefault(t => t.LogicalName == relationship.EntityName);
-					if (targetTable != null)
-						sb.Append($"{targetTable.Name}Definition.EntityName");
-					else
-						sb.Append($"\"{relationship.EntityName}\"");
-
-					sb.Append($", EntityRole.{relationship.Role}, \"{relationship.NavigationPropertyName}\", ");
-
-
-					if (relationType == "ManyToOneRelationships")
-					{
-						if (relationship.Role == EntityRole.Referencing)
-						{
-							var rc = table.Columns.FirstOrDefault(
-								col => col.LogicalName == relationship.LookupFieldName);
-
-							if (rc != null && rc.Selected)
-								sb.Append($"{table.Name}Definition.Columns.{rc.Name}");
-							else
-								sb.Append($"\"{relationship.LookupFieldName}\"");
-						}
-						else
-						{
-							var rc = table.Columns.FirstOrDefault(
-								col => col.LogicalName == relationship.LookupFieldName);
-
-
-							if (rc != null)
-								sb.Append($"{table.Name}Definition.Columns.{rc.Name}");
-							else
-								sb.Append($"\"{relationship.LookupFieldName}\"");
-						}
-
-						sb.AppendLine(")]");
-						sb.AppendLine($"public const string {relationship.Name} = \"{relationship.Name}\";");
-					}
-					else
-					{
-						if (relationship.Role == EntityRole.Referencing)
-						{
-							var tb = tables.FirstOrDefault(t => t.LogicalName          == relationship.EntityName);
-							var rc = tb?.Columns.FirstOrDefault(col => col.LogicalName == relationship.LookupFieldName);
-
-							if (rc != null && rc.Selected && tb != null)
-								sb.Append($"{tb.Name}Definition.Columns.{rc.Name}");
-							else
-								sb.Append($"\"{relationship.LookupFieldName}\"");
-						}
-						else
-						{
-							var tb = tables.FirstOrDefault(t => t.LogicalName == relationship.EntityName);
-
-							var rc = tb?.Columns.FirstOrDefault(col => col.LogicalName == relationship.LookupFieldName);
-
-							if (rc != null && rc.Selected && tb != null)
-								sb.Append($"{tb.Name}Definition.Columns.{rc.Name}");
-							else
-								sb.Append($"\"{relationship.LookupFieldName}\"");
-						}
-
-						sb.AppendLine(")]");
-						sb.AppendLine($"public const string {relationship.Name} = \"{relationship.Name}\";");
-					}
-				}
-			}
-
-			sb.AppendLine("}");
-		}
-	}
-
-	private string DeleteCharacter(string word, char letterToDelete)
-	{
-		if (word == String.Empty) return word;
-		string[] list = word.Split(letterToDelete);
-		return string.Concat(list);
+		return finalWord;
 	}
 
 
-    private string AvoidWordThatBeginByANumber(string word)
+    private string ParseFirstCharacterOfAWord(string word, string valideCharacters)
 	{
-		if (word == String.Empty) return word;
-		if (word == null) return null;
-		int i = 0;
-		if (int.TryParse(word.Substring(0,1), out i)) return "_"+word;
-		else return word;
+		if (String.IsNullOrEmpty(word)) return word;
+		if (valideCharacters.Contains(word[0])) return word;
+		else return "_" + word;
 	}
 
-    private string AvoidWordThatBeginByASubWord(string word, string subWord)
-    {
-        if (word == String.Empty) 
-			return word;
-        if (word == null) 
-			return null;
-		if(word.Length < subWord.Length) 
-			return word;
-        
-		if(word.Substring(0, subWord.Length)  == subWord) 
-			return word.Substring(subWord.Length);
-		
-		return word;
+	private string ParseName(string name)
+	{
+		const string valideFirstCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+		const string valideCharacters = "0123456789_";
+
+
+
+		var valideCharacters2 = valideFirstCharacters + valideCharacters;
+
+		name = ParseFirstCharacterOfAWord(name, valideFirstCharacters);
+
+		name = ParseAllCharacterOfAWord(name, valideCharacters2);
+
+
+        return name;
+	}
+
+	private void DeleteLastComa(IndentedStringBuilder sb, int indentDepth)
+	{
+
+        string sbString = sb.ToString();
+
+		sbString = sbString.TrimEnd('\n').TrimEnd('\r').TrimEnd(',');
+		sb.Clear();
+		for (int i = 0; i < indentDepth; i++)
+		{
+			sb.DecrementIndent();
+		}
+        sb.AppendLine(sbString);
+		for (int i = 0; i < indentDepth; i++)
+		{
+            sb.IncrementIndent();
+        }
     }
-
-	private int HowManyTimeThisWordIsInList(string word, List<string> list)
-	{
-		if(list.Count == 0) return 0;
-		return list.FindAll(
-			delegate(string element)
-			{
-				return element == word;
-			}
-			).Count;
-	}
 }
