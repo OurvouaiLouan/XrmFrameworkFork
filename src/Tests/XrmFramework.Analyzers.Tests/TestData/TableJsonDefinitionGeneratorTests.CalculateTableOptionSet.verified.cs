@@ -10,8 +10,6 @@ const globalEnumsDefinition = {
     LogicalCollectionName: "",
     PrimaryIdAttribute: "",
     PrimaryNameAttribute: "",
-    Columns: {
-    },
     Enums: {
         SynapseLinkProfileEntityType: {
             Requested: 0

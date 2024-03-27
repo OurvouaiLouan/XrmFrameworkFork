@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
+using System.Linq;
 using XrmFramework.Core;
 
 namespace XrmFramework.Analyzers.Generators;
@@ -29,58 +30,87 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 
             if (table.Columns.Any())
 			{
-
-			
                 sb.AppendLine("Columns: {");
-			using (sb.Indent())
-			{
-				var columns = table.Columns
-					.Select(ToStringColumn)
-					.ToList();
-
-				columns.Take(columns.Count - 1)
-					.ToList()
-					.ForEach(c => sb.AppendLine(c));
-
-				var lastColumn = columns.Last();
-
-				sb.AppendLine(lastColumn.TrimEnd(','));
-
-     //           if (table.Columns.Any())
-     //           {
-  			//		var sbColumn = new IndentedStringBuilder();
-					//foreach (var col in table.Columns)
-     //               {
-     //                   WriteColumn(sbColumn, col);
-     //               }
-					//var columns = sbColumn.ToString().TrimEnd(',');
-					//sbColumn.
-					//sb.AppendLine(columns);
-     //           }
-            }
-            }
-
-            sb.AppendLine("},");
-
-			sb.AppendLine("Enums: {");
-			using (sb.Indent())
-			{
-				foreach (var optionSetEnum in table.Enums)
+				using (sb.Indent())
 				{
+					var columns = table.Columns
+						.Select(ToStringColumn)
+						.ToList();
 
-					sb = WriteEnum(sb, optionSetEnum);
+					columns.Take(columns.Count - 1)
+						.ToList()
+						.ForEach(c => sb.AppendLine(c));
+
+					var lastColumn = columns.Last();
+
+					sb.AppendLine(lastColumn.TrimEnd(','));
+				}
+                sb.AppendLine("},");
+            }
+
+            if (table.Enums.Any())
+            {
+                sb.AppendLine("Enums: {");
+                using (sb.Indent())
+                {
+                    var enums = table.Enums
+                        .Select(ToStringEnum)
+                        .ToList();
+
+					enums.Take(enums.Count-1)
+						.ToList()
+						.ForEach(delegate(List<string> listStr)
+						{
+                            var firstListStr = listStr.First();
+
+                            sb.AppendLine(firstListStr);
+
+                            listStr.GetRange(1, listStr.Count - 1).Take(listStr.Count - 2)
+									.ToList()
+                                    .ForEach(delegate(string str)
+									{
+										using (sb.Indent())
+										{
+											sb.AppendLine(str);
+										}
+									});
+                                
+								
+							var lastListStr = listStr.Last();
+
+                            sb.AppendLine(lastListStr);
+                        });
+
+                    var lastEnums = enums.Last();
+
+					var firstListStr = lastEnums.First();
+
+                    sb.AppendLine(firstListStr);
+
+                    lastEnums.GetRange(1, lastEnums.Count - 1).Take(lastEnums.Count-2)
+								.ToList()
+								.ForEach(delegate (string str)
+                                {
+                                    using (sb.Indent())
+                                    {
+                                        sb.AppendLine(str);
+                                    }
+                                });
+                    var lastListStr = lastEnums.Last();
+
+                    sb.AppendLine(lastListStr.TrimEnd(','));
 
                 }
 
-                DeleteLastComa(sb,2);
+                sb.AppendLine("}");
             }
 
-
-
-            sb.AppendLine("}");
+            
         }
 
-		sb.AppendLine("};");
+        sb.AppendLine("};");
+
+
 
 
         //On crée le chemin pour cette table
@@ -91,34 +121,28 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 		return $"{col.Name}: \"{col.LogicalName}\",";
 
     }
-	private IndentedStringBuilder WriteEnum(IndentedStringBuilder sb, OptionSetEnum optionSetEnum)
+
+	private List<string> ToStringEnum(OptionSetEnum optionSetEnum)
 	{
-		sb.AppendLine($"{optionSetEnum.Name}: {{");
+        List<string> listStr = new List<string>();
+
+        listStr.Add($"{optionSetEnum.Name}: {{");
+
+		optionSetEnum.Values.Take(optionSetEnum.Values.Count-1)
+			.ToList()
+			.ForEach(value => listStr.Add($"{ParseName(value.Name)}: {value.Value},"));
+
+        var lastValue = optionSetEnum.Values.Last();
+		var lastStr = $"{ParseName(lastValue.Name)}: {lastValue.Value}";
+
+        listStr.Add(lastStr);
+
+        listStr.Add("},");
 
 
-        List<string> nameUse = new List<string>();
-		using (sb.Indent())
-		{
-			foreach (var value in optionSetEnum.Values)
-			{
-				string name = ParseName(value.Name);
-
-				sb.AppendLine($"{name}: {value.Value},");
-            }
-
-
-            DeleteLastComa(sb,3);
-        }
-        sb.AppendLine("},");
-
-		return sb;
+        return listStr;
 
     }
-
-	private void WriteColumn(IndentedStringBuilder sb, Column col)
-	{
-		sb.AppendLine($"{col.Name}: \"{col.LogicalName}\",");
-	}
 
 	private void WriteEntityMetadata(IndentedStringBuilder sb, Table table)
 	{
