@@ -45,8 +45,10 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 
 					sb.AppendLine(lastColumn.TrimEnd(','));
 				}
-                if(table.Enums.Any()) sb.AppendLine("},");
-				else sb.AppendLine("},");
+                if(table.Enums.Any())
+					sb.AppendLine("},");
+				else
+					sb.AppendLine("}");
             }
 
             if (table.Enums.Any())
@@ -181,7 +183,8 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 
     private string ParseFirstCharacterOfAWord(string word, string valideCharacters)
 	{
-		if (String.IsNullOrEmpty(word)) return word;
+		if (String.IsNullOrEmpty(word)) return "_";
+
 		if (valideCharacters.Contains(word[0])) return word;
 		else return "_" + word;
 	}

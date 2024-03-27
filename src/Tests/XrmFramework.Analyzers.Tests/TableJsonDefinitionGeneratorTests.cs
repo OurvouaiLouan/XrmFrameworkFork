@@ -9,7 +9,7 @@ namespace XrmFramework.Analyzers.Tests;
 public class TableJsonDefinitionGeneratorTests
 {
 	[Fact]
-	public async Task CalculateTableFiles()
+	public async Task CalculateTableSansEnum()
 	{
 		// The source code to test
 		var source = @"";
@@ -17,7 +17,21 @@ public class TableJsonDefinitionGeneratorTests
         // Pass the source code to our helper and snapshot test the output
 
         await TestHelper.Verify<TableJsonDefinitionGenerator>(source,
-            ("OptionSet.table", TableFiles.OptionSet)
+            ("SansEnum.table", TableFiles.SansEnum)
+            );
+
+    }
+
+    [Fact]
+    public async Task CalculateTableSansColSansEnum()
+    {
+        // The source code to test
+        var source = @"";
+
+        // Pass the source code to our helper and snapshot test the output
+
+        await TestHelper.Verify<TableJsonDefinitionGenerator>(source,
+            ("SansColSansEnum.table", TableFiles.SansColSansEnum)
             );
 
     }

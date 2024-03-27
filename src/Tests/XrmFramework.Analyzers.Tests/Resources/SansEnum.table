@@ -1,0 +1,143 @@
+{
+  "LogName": "sansEnum",
+  "Name": "SansEnum",
+  "CollName": "sansEnums",
+  "Cols": [
+    {
+      "LogName": "accountcategorycode",
+      "Name": "AccountCategoryCode",
+      "Type": "Picklist",
+      "Capa": 15,
+      "Labels": [
+        {
+          "Label": "Catégorie",
+          "LangId": 1036
+        }
+      ],
+      "EnumName": "account|accountcategorycode"
+    },
+    {
+      "LogName": "accountid",
+      "Name": "Id",
+      "Type": "Uniqueidentifier",
+      "PrimaryType": "Id",
+      "Capa": 13,
+      "Labels": [
+        {
+          "Label": "Compte",
+          "LangId": 1036
+        }
+      ]
+    },
+    {
+      "LogName": "accountnumber",
+      "Name": "AccountNumber",
+      "Type": "String",
+      "Capa": 15,
+      "Labels": [
+        {
+          "Label": "Numéro de compte",
+          "LangId": 1036
+        }
+      ],
+      "StrLen": 20
+    },
+    {
+      "LogName": "address1_county",
+      "Name": "Address1_County",
+      "Type": "String",
+      "Capa": 15,
+      "Labels": [
+        {
+          "Label": "Adresse 1 : Commune",
+          "LangId": 1036
+        }
+      ],
+      "StrLen": 50
+    },
+    {
+      "LogName": "address1_latitude",
+      "Name": "Address1_Latitude",
+      "Type": "Double",
+      "Capa": 15,
+      "Labels": [
+        {
+          "Label": "Adresse 1 : Latitude",
+          "LangId": 1036
+        }
+      ],
+      "MinRange": -90.0,
+      "MaxRange": 90.0
+    },
+    {
+      "LogName": "address1_line3",
+      "Name": "Address1_Line3",
+      "Type": "String",
+      "Capa": 15,
+      "Labels": [
+        {
+          "Label": "Adresse 1 : Rue 3",
+          "LangId": 1036
+        }
+      ],
+      "StrLen": 250
+    },
+    {
+      "LogName": "address1_postalcode",
+      "Name": "Address1_PostalCode",
+      "Type": "String",
+      "Capa": 15,
+      "Labels": [
+        {
+          "Label": "Adresse 1 : Code postal",
+          "LangId": 1036
+        }
+      ],
+      "StrLen": 20
+    },
+    {
+      "LogName": "address1_stateorprovince",
+      "Name": "Address1_StateOrProvince",
+      "Type": "String",
+      "Capa": 15,
+      "Labels": [
+        {
+          "Label": "Adresse 1 : Département/province",
+          "LangId": 1036
+        }
+      ],
+      "StrLen": 50
+    },
+    {
+      "LogName": "address2_freighttermscode",
+      "Name": "Address2_FreightTermsCode",
+      "Type": "Picklist",
+      "Capa": 7,
+      "Labels": [
+        {
+          "Label": "Adresse 2 : Conditions de transport",
+          "LangId": 1036
+        }
+      ],
+      "EnumName": "account|address2_freighttermscode"
+    },
+    {
+      "LogName": "name",
+      "Name": "Name",
+      "Type": "String",
+      "PrimaryType": "Name",
+      "Capa": 15,
+      "Labels": [
+        {
+          "Label": "Nom du compte",
+          "LangId": 1036
+        }
+      ],
+      "StrLen": 160
+    }
+  ],
+  "NtoN": [],
+  "OneToN": [],
+  "NToOne": [],
+  "Enums":  []
+}
