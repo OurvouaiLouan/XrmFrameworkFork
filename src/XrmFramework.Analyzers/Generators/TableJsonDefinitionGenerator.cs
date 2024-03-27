@@ -45,7 +45,8 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 
 					sb.AppendLine(lastColumn.TrimEnd(','));
 				}
-                sb.AppendLine("},");
+                if(table.Enums.Any()) sb.AppendLine("},");
+				else sb.AppendLine("},");
             }
 
             if (table.Enums.Any())
@@ -151,8 +152,11 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 		sb.AppendLine($"CollectionName: \"{table.CollectionName}\",");
 		sb.AppendLine($"LogicalCollectionName: \"{table.CollectionName}\",");
 		sb.AppendLine($"PrimaryIdAttribute: \"{table.Columns.FirstOrDefault(c => c.PrimaryType   == PrimaryType.Id)?.LogicalName}\",");
-		sb.AppendLine($"PrimaryNameAttribute: \"{table.Columns.FirstOrDefault(c => c.PrimaryType == PrimaryType.Name)?.LogicalName}\",");
-	}
+		if(table.Columns.Any() || table.Enums.Any())
+			sb.AppendLine($"PrimaryNameAttribute: \"{table.Columns.FirstOrDefault(c => c.PrimaryType == PrimaryType.Name)?.LogicalName}\",");
+		else
+            sb.AppendLine($"PrimaryNameAttribute: \"{table.Columns.FirstOrDefault(c => c.PrimaryType == PrimaryType.Name)?.LogicalName}\"");
+    }
 
 	private void WriteHeaders(IndentedStringBuilder sb)
 	{
