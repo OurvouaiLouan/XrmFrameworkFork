@@ -1,9 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using Microsoft.EntityFrameworkCore.Internal;
-using Newtonsoft.Json;
-using System.Linq;
+using XrmFramework.Analyzers.Definitions;
 using XrmFramework.Core;
 
 namespace XrmFramework.Analyzers.Generators;
@@ -15,157 +12,71 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 
 	protected override void WriteTable(SourceProductionContext productionContext, TableCollection tables, Table table, HashSet<string> alreadyCreatedEnums)
 	{
-		var sb = new IndentedStringBuilder();
 
-		sb.AppendLine("#if COMPILE_JSON");
+		/*
+		 * On créer une liste représentant la section Columns d'un Json
+		 * JsonColumn représente un élément de la section Columns
+		 */
+		List<JsonColumn> jsonColumns = new List<JsonColumn>();
 
-        WriteHeaders(sb);
-
-		sb.AppendLine($"const {table.LogicalName}Definition = {{");
-
-		using (sb.Indent())
-		{
-			WriteEntityMetadata(sb, table);
-
-
-            if (table.Columns.Any())
-			{
-                sb.AppendLine("Columns: {");
-				using (sb.Indent())
-				{
-					var columns = table.Columns
-						.Select(ToStringColumn)
-						.ToList();
-
-					columns.Take(columns.Count - 1)
-						.ToList()
-						.ForEach(c => sb.AppendLine(c));
-
-					var lastColumn = columns.Last();
-
-					sb.AppendLine(lastColumn.TrimEnd(','));
-				}
-                if(table.Enums.Any())
-					sb.AppendLine("},");
-				else
-					sb.AppendLine("}");
-            }
-
-            if (table.Enums.Any())
-            {
-                sb.AppendLine("Enums: {");
-                using (sb.Indent())
-                {
-                    var enums = table.Enums
-                        .Select(ToStringEnum)
-                        .ToList();
-
-					enums.Take(enums.Count-1)
-						.ToList()
-						.ForEach(delegate(List<string> listStr)
-						{
-                            var firstListStr = listStr.First();
-
-                            sb.AppendLine(firstListStr);
-
-                            listStr.GetRange(1, listStr.Count - 1).Take(listStr.Count - 2)
-									.ToList()
-                                    .ForEach(delegate(string str)
-									{
-										using (sb.Indent())
-										{
-											sb.AppendLine(str);
-										}
-									});
-                                
-								
-							var lastListStr = listStr.Last();
-
-                            sb.AppendLine(lastListStr);
-                        });
-
-                    var lastEnums = enums.Last();
-
-					var firstListStr = lastEnums.First();
-
-                    sb.AppendLine(firstListStr);
-
-                    lastEnums.GetRange(1, lastEnums.Count - 1).Take(lastEnums.Count-2)
-								.ToList()
-								.ForEach(delegate (string str)
-                                {
-                                    using (sb.Indent())
-                                    {
-                                        sb.AppendLine(str);
-                                    }
-                                });
-                    var lastListStr = lastEnums.Last();
-
-                    sb.AppendLine(lastListStr.TrimEnd(','));
-
-                }
-
-                sb.AppendLine("}");
-            }
-
-            
-        }
-
-		sb.AppendLine("};");
-		
-		sb.AppendLine("#endif");
-
-
-        //On crée le chemin pour cette table
-        productionContext.AddSource($"{table.Name}Definition.json", SourceText.From(sb.ToString(),System.Text.Encoding.UTF8));
-	}
-	private string ToStringColumn(Column col)
-	{
-		return $"{col.Name}: \"{col.LogicalName}\",";
-
-    }
-
-	private List<string> ToStringEnum(OptionSetEnum optionSetEnum)
-	{
-        List<string> listStr = new List<string>();
-
-        listStr.Add($"{optionSetEnum.Name}: {{");
-
-		optionSetEnum.Values.Take(optionSetEnum.Values.Count-1)
+		table.Columns.Take(table.Columns.Count)
 			.ToList()
-			.ForEach(value => listStr.Add($"{ParseName(value.Name)}: {value.Value},"));
+			.ForEach(delegate (Column column)
+            {
+				JsonColumn jsonColumn = new JsonColumn(column.Name,column.LogicalName);
 
-        var lastValue = optionSetEnum.Values.Last();
-		var lastStr = $"{ParseName(lastValue.Name)}: {lastValue.Value}";
+				jsonColumns.Add(jsonColumn);
 
-        listStr.Add(lastStr);
+            });
 
-        listStr.Add("},");
+		/*
+         * On créer une liste représentant la section Enums d'un Json
+		 * JsonEnum représente un élément de la section Enums
+		 */
+        List<JsonEnum> jsonEnums = new List<JsonEnum>();
 
+		table.Enums.Take(table.Enums.Count)
+			.ToList()
+			.ForEach(delegate (OptionSetEnum optionSetEnum)
+            {
+				/*
+                 * JsonEnumValue représente un sous-élément d'un élément de la section Enums
+				 */
+                List<JsonEnumValue> jsonEnumValues = new List<JsonEnumValue>();
 
-        return listStr;
+				optionSetEnum.Values.Take(optionSetEnum.Values.Count)
+					.ToList()
+					.ForEach(delegate (OptionSetEnumValue o)
+					{
+						JsonEnumValue jsonEnumValue = new JsonEnumValue(ParseName(o.Name),o.Value);
 
-    }
+						jsonEnumValues.Add(jsonEnumValue);
+					});
 
-	private void WriteEntityMetadata(IndentedStringBuilder sb, Table table)
-	{
-		sb.AppendLine($"LogicalName: \"{table.LogicalName}\",");
-		sb.AppendLine($"SchemaName: \"{table.Name}\",");
-		sb.AppendLine($"CollectionName: \"{table.CollectionName}\",");
-		sb.AppendLine($"LogicalCollectionName: \"{table.CollectionName}\",");
-		sb.AppendLine($"PrimaryIdAttribute: \"{table.Columns.FirstOrDefault(c => c.PrimaryType   == PrimaryType.Id)?.LogicalName}\",");
-		if(table.Columns.Any() || table.Enums.Any())
-			sb.AppendLine($"PrimaryNameAttribute: \"{table.Columns.FirstOrDefault(c => c.PrimaryType == PrimaryType.Name)?.LogicalName}\",");
-		else
-            sb.AppendLine($"PrimaryNameAttribute: \"{table.Columns.FirstOrDefault(c => c.PrimaryType == PrimaryType.Name)?.LogicalName}\"");
-    }
+                JsonEnum jsonEnum = new JsonEnum(optionSetEnum.Name, jsonEnumValues);
 
-	private void WriteHeaders(IndentedStringBuilder sb)
-	{
-		sb.AppendLine("/*");
-		sb.AppendLine(" * Auto generated by XrmFramework 2.0");
-		sb.AppendLine(" * Do not edit directly this file");
-		sb.AppendLine(" */");
+				jsonEnums.Add(jsonEnum);
+			});
+		/*
+		 * On construit un JsonDefinition, une class représentant la structure d'un fichier Json
+		 */
+        JsonDefinition jsonDefinition = new JsonDefinition(table.LogicalName,
+                                                            table.Name,
+                                                            table.CollectionName,
+                                                            table.CollectionName,
+                                                            table.Columns.FirstOrDefault(c => c.PrimaryType == PrimaryType.Id)?.LogicalName,
+                                                            table.Columns.FirstOrDefault(c => c.PrimaryType == PrimaryType.Name)?.LogicalName,
+															jsonColumns,
+															jsonEnums);
+		/*
+         * On remplie le string builder avec les informations du JsonDefinition
+		 */
+        var sb = jsonDefinition.WriteJson();
+
+		/*
+         * On crée le chemin pour cette table
+         */
+        productionContext.AddSource($"{table.Name}Definition.json", SourceText.From(sb.ToString(),System.Text.Encoding.UTF8));
 	}
 
 	private string ParseAllCharacterOfAWord(string word, string valideCharacters)
@@ -206,22 +117,4 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 
         return name;
 	}
-
-	private void DeleteLastComa(IndentedStringBuilder sb, int indentDepth)
-	{
-
-        string sbString = sb.ToString();
-
-		sbString = sbString.TrimEnd('\n').TrimEnd('\r').TrimEnd(',');
-		sb.Clear();
-		for (int i = 0; i < indentDepth; i++)
-		{
-			sb.DecrementIndent();
-		}
-        sb.AppendLine(sbString);
-		for (int i = 0; i < indentDepth; i++)
-		{
-            sb.IncrementIndent();
-        }
-    }
 }
