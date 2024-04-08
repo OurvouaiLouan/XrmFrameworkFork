@@ -166,7 +166,6 @@ namespace XrmFramework.Analyzers.Definitions
             return sb;
 
         }
-
     }
 
     public struct JsonColumn
