@@ -12,6 +12,9 @@ public class PostBuildTask : Task
 	
 	public override bool Execute()
 	{
-		throw new NotImplementedException();
+		Log.LogWarning("Task Execute");
+		Log.LogWarning($"Generated files path: {GeneratedFilesPath}");
+
+		return true;
 	}
 }
