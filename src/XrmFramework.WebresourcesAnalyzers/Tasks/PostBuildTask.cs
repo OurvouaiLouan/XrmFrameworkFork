@@ -1,5 +1,5 @@
 ﻿using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
+using XrmFramework.WebresourcesAnalyzers.Definitions;
 using Task = Microsoft.Build.Utilities.Task;
 
 
@@ -12,8 +12,15 @@ public class PostBuildTask : Task
 	
 	public override bool Execute()
 	{
-		Log.LogWarning("Task successfully executed.");
-		Log.LogWarning($"Task input : {GeneratedFilesPath}");
+
+
+		JsonDefinition jsonDefinition = new JsonDefinition();
+
+        var sb = jsonDefinition.WriteJson();
+
+        Log.LogWarning("Task successfully executed.");
+		Log.LogWarning($"Task input :");
+		Log.LogWarning(sb.ToString());
 
 		return true;
 	}

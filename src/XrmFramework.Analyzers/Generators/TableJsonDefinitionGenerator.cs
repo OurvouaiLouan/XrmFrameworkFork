@@ -17,6 +17,7 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 		 * On créer une liste représentant la section Columns d'un Json
 		 * JsonColumn représente un élément de la section Columns
 		 */
+
 		List<JsonColumn> jsonColumns = new List<JsonColumn>();
 
 		table.Columns.Take(table.Columns.Count)
