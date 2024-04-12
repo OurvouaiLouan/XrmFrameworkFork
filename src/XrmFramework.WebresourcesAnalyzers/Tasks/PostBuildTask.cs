@@ -3,7 +3,7 @@ using Microsoft.Build.Utilities;
 using Task = Microsoft.Build.Utilities.Task;
 
 
-namespace XrmFramework.WebresourcesAnalyzers.Tasks;
+namespace WebresourcesAnalyzers;
 
 public class PostBuildTask : Task
 {
@@ -12,8 +12,8 @@ public class PostBuildTask : Task
 	
 	public override bool Execute()
 	{
-		Log.LogWarning("Task Execute");
-		Log.LogWarning($"Generated files path: {GeneratedFilesPath}");
+		Log.LogWarning("Task successfully executed.");
+		Log.LogWarning($"Task input : {GeneratedFilesPath}");
 
 		return true;
 	}
