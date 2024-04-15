@@ -24,7 +24,8 @@
     <UsingTask TaskName="WebresourcesAnalyzers.PostBuildTask" AssemblyFile="../XrmFramework.WebresourcesAnalyzers/bin/Release/netstandard2.0/XrmFramework.WebresourcesAnalyzers.dll" />
     
     <Target Name="Test Execute Post Build" AfterTargets="Build">
-        <PostBuildTask GeneratedFilesPath="Hello World!">
+        <PostBuildTask FilesToConvertPath="..\Tests\XrmFramework.Analyzers.Tests\Resources\" ConvertedFilesPath="..\Tests\XrmFramework.Analyzers.Tests\JSRessources\">
+		
         </PostBuildTask>
     </Target>
 </Project>

@@ -77,7 +77,7 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 		/*
          * On crée le chemin pour cette table
          */
-        productionContext.AddSource($"{table.Name}Definition.json", SourceText.From(sb.ToString(),System.Text.Encoding.UTF8));
+        productionContext.AddSource($"{table.Name}Definition.js", SourceText.From(sb.ToString(),System.Text.Encoding.UTF8));
 	}
 
 	private string ParseAllCharacterOfAWord(string word, string valideCharacters)
