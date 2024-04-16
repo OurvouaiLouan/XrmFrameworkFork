@@ -7,7 +7,8 @@
     </PropertyGroup>	
 	
     <ItemGroup>
-		<PackageReference Include="XrmFramework.Analyzers" Version="2.2.87-gaae62d9f91" />
+		<ProjectReference Include="..\XrmFramework.Analyzers\XrmFramework.Analyzers.csproj" OutputItemType="Analyzer"
+						  ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 	<PropertyGroup>

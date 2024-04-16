@@ -75,7 +75,7 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
         var sb = jsonDefinition.WriteJson();
 
 
-        File.WriteAllText($"../../../../../JsonTests/GeneratedJson/Input/{table.Name}Definition.js", sb.ToString());
+        // File.WriteAllText($"../../../../../JsonTests/GeneratedJson/Input/{table.Name}Definition.js", sb.ToString());
 
 
         /*
