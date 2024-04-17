@@ -7,33 +7,39 @@
     </PropertyGroup>	
 	
     <ItemGroup>
-		<ProjectReference Include="..\XrmFramework.Analyzers\XrmFramework.Analyzers.csproj" OutputItemType="Analyzer"
-						  ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\XrmFramework.Analyzers\XrmFramework.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 	<PropertyGroup>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-		<CompilerGeneratedFilesOutputPath>GeneratedJson</CompilerGeneratedFilesOutputPath>
+		<CompilerGeneratedFilesOutputPath>obj\GeneratedJson</CompilerGeneratedFilesOutputPath>
+		<JSOutputFolderPath>Definition</JSOutputFolderPath>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Content Remove="obj\**" />
+		<EmbeddedResource Remove="obj\**" />
 		<None Remove="..\JsonTests\**\*.table" />
+		<None Remove="obj\**" />
 		<AdditionalFiles Include="..\JsonTests\**\*.table" Exclude="bin/**;obj/**" />
 
-		<Compile Remove="**/GeneratedJson/**/*.cs" />
-		<None Include="**/GeneratedJson/**/*.cs" />
-	</ItemGroup>
+		<Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
 
-	<ItemGroup>
-	  <Folder Include="GeneratedJson\Input\" />
-	  <Folder Include="GeneratedJson\Output\" />
+		<Compile Remove="**/$(JSOutputFolderPath)" />
+
+		<Compile Remove="obj\**" />
+		<None Include="**/$(JSOutputFolderPath)" />
+
+
+		<None Remove="$(CompilerGeneratedFilesOutputPath)\**" />
+		<None Include="$(JSOutputFolderPath)\*.js"/>
 	</ItemGroup>
 
 	
 	<UsingTask TaskName="WebresourcesAnalyzers.PostBuildTask" AssemblyFile="../XrmFramework.WebresourcesAnalyzers/bin/Release/netstandard2.0/XrmFramework.WebresourcesAnalyzers.dll" />
     
-    <Target Name="Test Execute Post Build" AfterTargets="Build">
-        <PostBuildTask FilesToConvertPath="..\JsonTests\GeneratedJson\Input" ConvertedFilesPath="..\JsonTests\GeneratedJson\Output">
+    <Target Name="Convert JsonCs to Js" AfterTargets="Build">
+        <PostBuildTask FilesToConvertPath="$(MSBuildThisFileDirectory)$(CompilerGeneratedFilesOutputPath)\XrmFramework.Analyzers\XrmFramework.Analyzers.Generators.TableJsonDefinitionGenerator\" ConvertedFilesPath="$(MSBuildThisFileDirectory)$(JSOutputFolderPath)">
 		
         </PostBuildTask>
     </Target>

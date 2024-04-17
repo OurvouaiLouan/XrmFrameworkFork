@@ -15,6 +15,9 @@ public class PostBuildTask : Task
 	{
         if(FilesToConvertPath == null || ConvertedFilesPath == null) return false;
 
+        if (!Directory.Exists(ConvertedFilesPath)) Directory.CreateDirectory(ConvertedFilesPath);
+
+
         Log.LogWarning("Task successfully executed.");
         Log.LogWarning($"Files To Convert : {FilesToConvertPath}");
         Log.LogWarning($"Converted Files : {ConvertedFilesPath}");
@@ -28,15 +31,18 @@ public class PostBuildTask : Task
             index++;
             Log.LogWarning($"Input File {index}: {file}");
             string pathOutput = $"{ConvertedFilesPath}/{file.Split('\\').Last().Split('.').First()}.js";
-            string contentOutput = File.ReadAllText(file);
-            if(contentOutput.Length > 27) 
-                contentOutput = contentOutput.Remove(contentOutput.Count()-9,9).Remove(0,18);
-            File.WriteAllText(pathOutput, contentOutput);
+            var rawContent = File.ReadAllLines(file);
+            var listRawContent = rawContent.ToList();
+            listRawContent.RemoveAt(0);
+            listRawContent.RemoveAt(listRawContent.Count-1);
+            var contentOutput = listRawContent;
+            File.WriteAllLines(pathOutput, contentOutput);
             
         }
 
 
         Log.LogWarning($"___Output Files___");
+
         files = Directory.GetFiles(ConvertedFilesPath);
         index = 0;
         foreach (string file in files)
