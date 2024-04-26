@@ -58,6 +58,9 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 
 				jsonEnums.Add(jsonEnum);
 			});
+
+
+
 		/*
 		 * On construit un JsonDefinition, une class représentant la structure d'un fichier Json
 		 */
@@ -73,9 +76,6 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
          * On remplie le string builder avec les informations du JsonDefinition
 		 */
         var sb = jsonDefinition.WriteJson();
-
-
-        // File.WriteAllText($"../../../../../JsonTests/GeneratedJson/Input/{table.Name}Definition.js", sb.ToString());
 
 
         /*
@@ -108,9 +108,9 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 
 	private string ParseName(string name)
 	{
-		const string valideFirstCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		const string valideFirstCharacters = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-		const string valideCharacters = "0123456789_";
+		const string valideCharacters = "0123456789";
 
 
 
