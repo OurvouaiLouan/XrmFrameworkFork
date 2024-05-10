@@ -57,6 +57,10 @@
       <ProjectReference Include="..\XrmFramework.Analyzers\XrmFramework.Analyzers.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="DefinitionJS\" />
+    </ItemGroup>
+
     <PropertyGroup>
         <GetTargetPathDependsOn>
             $(GetTargetPathDependsOn);GetDependencyTargetPaths

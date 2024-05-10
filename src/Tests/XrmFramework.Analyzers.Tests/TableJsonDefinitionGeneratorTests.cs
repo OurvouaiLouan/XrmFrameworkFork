@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using VerifyXunit;
-using XrmFramework.Analyzers.Generators;
+using XrmFramework.WebresourcesAnalyzers.Generators;
 using Xunit;
 
 namespace XrmFramework.Analyzers.Tests;

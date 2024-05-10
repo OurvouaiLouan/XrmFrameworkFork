@@ -1,9 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
-using XrmFramework.Analyzers.Definitions;
+using XrmFramework.WebresourcesAnalyzers.Definitions;
 using XrmFramework.Core;
 
-namespace XrmFramework.Analyzers.Generators;
+namespace XrmFramework.WebresourcesAnalyzers.Generators;
 
 [Generator]
 public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
