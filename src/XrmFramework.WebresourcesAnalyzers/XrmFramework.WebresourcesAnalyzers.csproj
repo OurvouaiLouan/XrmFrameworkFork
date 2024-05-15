@@ -25,6 +25,11 @@
     <ItemGroup>
         
         <Compile Include="..\XrmFramework.Core\**\*.cs" Link="_Imports/XrmFramework.Core\%(RecursiveDir)%(Filename)%(Extension)" Exclude="..\XrmFramework.Core\bin\**;..\XrmFramework.Core\obj\**" />
+        
+        <None Remove="Resources\*.table" />
+        <AdditionalFiles Include="Resources\*.table" />
+        
+        <AdditionalFiles Include="Resources\SansEnum.table" />
         <Compile Include="..\XrmFramework\Utils\SdkEnums.cs" Link="XrmFramework.Core\SdkEnums.cs" />
 
     </ItemGroup>
@@ -44,10 +49,6 @@
         <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
         <EmbeddedResource Update="Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
     </ItemGroup>
-
-	<!--<ItemGroup>
-		<ProjectReference Include="..\JsonTests\JsonTests.csproj" />
-	</ItemGroup>-->
 
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" PrivateAssets="all" GeneratePathProperty="true" />

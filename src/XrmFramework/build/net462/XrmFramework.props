@@ -1,45 +1,52 @@
 ﻿<Project>
 
 	<ItemGroup>
-		<ProjectReference Include="..\XrmFramework.WebresourcesAnalyzers\XrmFramework.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-	</ItemGroup>
-
-    <ItemGroup>
+		<ProjectReference Include="..\XrmFramework.WebresourcesAnalyzers\XrmFramework.Analyzers.csproj" 
+						  OutputItemType="Analyzer" 
+						  ReferenceOutputAssembly="false" />
         <Compile Include="obj\LoggedServices\*.cs" />
     </ItemGroup>
 
+
 	<PropertyGroup>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-		<CompilerGeneratedFilesOutputPath>obj\GeneratedJson</CompilerGeneratedFilesOutputPath>
+		<ToXrmFrameworkWebresourcesAnalyzers>..\..\..\..\XrmFramework.WebresourcesAnalyzers</ToXrmFrameworkWebresourcesAnalyzers>
+		<CompilerGeneratedFilesOutputPath>obj\GeneratedJson\XrmFramework.Analyzers\XrmFramework.Analyzers.Generators.TableJsonDefinitionGenerator</CompilerGeneratedFilesOutputPath>
 		<JSOutputFolderPath>DefinitionJS</JSOutputFolderPath>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<Content Remove="obj\**" />
-		<EmbeddedResource Remove="obj\**" />
-		<None Remove="..\JsonTests\**\*.table" />
-		<None Remove="obj\**" />
-		<AdditionalFiles Include="..\JsonTests\**\*.table" Exclude="bin/**;obj/**" />
 
-		<Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+	<ItemGroup>
+		<Content Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\obj\**" />
+		<EmbeddedResource Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\obj\**" />
+		<None Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\..\JsonTests\**\*.table" />
+		<None Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\obj\**" />
+		<AdditionalFiles Include="$(ToXrmFrameworkWebresourcesAnalyzers)\..\JsonTests\**\*.table" 
+						 Exclude="bin/**;obj/**" />
+
+		<Compile Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
 
 		<Compile Remove="**/$(JSOutputFolderPath)" />
 
-		<Compile Remove="obj\**" />
+		<Compile Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\obj\**" />
 		<None Include="**/$(JSOutputFolderPath)" />
 
 
-		<None Remove="$(CompilerGeneratedFilesOutputPath)\**" />
-		<None Include="$(JSOutputFolderPath)\*.js"/>
+		<None Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\$(CompilerGeneratedFilesOutputPath)\**" />
+		<None Include="$(ToXrmFrameworkWebresourcesAnalyzers)\$(JSOutputFolderPath)\*.js"/>
+
+		<None Include="$(ToXrmFrameworkWebresourcesAnalyzers)\Resources\*.table"/>
 
 
-		<UsingTask TaskName="WebresourcesAnalyzers.PostBuildTask" AssemblyFile="../XrmFramework.WebresourcesAnalyzers/bin/Release/netstandard2.0/XrmFramework.WebresourcesAnalyzers.dll" />
+		<UsingTask TaskName="WebresourcesAnalyzers.PostBuildTask" 
+				   AssemblyFile="$(ToXrmFrameworkWebresourcesAnalyzers)/bin/Release/netstandard2.0/XrmFramework.WebresourcesAnalyzers.dll" />
 
-		<Target Name="Convert JsonCs to Js" AfterTargets="Build">
-			<PostBuildTask FilesToConvertPath="$(MSBuildThisFileDirectory)$(CompilerGeneratedFilesOutputPath)\XrmFramework.Analyzers\XrmFramework.Analyzers.Generators.TableJsonDefinitionGenerator\" ConvertedFilesPath="$(MSBuildThisFileDirectory)$(JSOutputFolderPath)">
-
-			</PostBuildTask>
+		<Target Name="Convert JsonCs to Js" 
+				AfterTargets="Build">
+			<PostBuildTask FilesToConvertPath="$(ToXrmFrameworkWebresourcesAnalyzers)\$(CompilerGeneratedFilesOutputPath)" 
+						   ConvertedFilesPath="$(ToXrmFrameworkWebresourcesAnalyzers)\$(JSOutputFolderPath)"/>
 		</Target>
+		
 	</ItemGroup>
 
 

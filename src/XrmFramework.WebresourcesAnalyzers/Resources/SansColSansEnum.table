@@ -1,0 +1,10 @@
+{
+  "LogName": "sansColSansEnum",
+  "Name": "SansColSansEnum",
+  "CollName": "sansColSansEnums",
+  "Cols": [],
+  "NtoN": [],
+  "OneToN": [],
+  "NToOne": [],
+  "Enums":  []
+}
