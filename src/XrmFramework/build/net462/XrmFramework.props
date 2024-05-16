@@ -38,14 +38,7 @@
 		<None Include="$(ToXrmFrameworkWebresourcesAnalyzers)\Resources\*.table"/>
 
 
-		<UsingTask TaskName="WebresourcesAnalyzers.PostBuildTask" 
-				   AssemblyFile="$(ToXrmFrameworkWebresourcesAnalyzers)/bin/Release/netstandard2.0/XrmFramework.WebresourcesAnalyzers.dll" />
-
-		<Target Name="Convert JsonCs to Js" 
-				AfterTargets="Build">
-			<PostBuildTask FilesToConvertPath="$(ToXrmFrameworkWebresourcesAnalyzers)\$(CompilerGeneratedFilesOutputPath)" 
-						   ConvertedFilesPath="$(ToXrmFrameworkWebresourcesAnalyzers)\$(JSOutputFolderPath)"/>
-		</Target>
+		
 		
 	</ItemGroup>
 

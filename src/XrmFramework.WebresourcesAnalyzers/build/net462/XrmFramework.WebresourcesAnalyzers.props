@@ -1,0 +1,12 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<UsingTask TaskName="WebresourcesAnalyzers.PostBuildTask" 
+			   AssemblyFile="$(ToXrmFrameworkWebresourcesAnalyzers)/bin/Release/netstandard2.0/XrmFramework.WebresourcesAnalyzers.dll" />
+
+	<Target Name="Convert_JsonCs_to_Js" 
+			AfterTargets="Build">
+			<PostBuildTask FilesToConvertPath="$(ToXrmFrameworkWebresourcesAnalyzers)\$(CompilerGeneratedFilesOutputPath)" 
+						   ConvertedFilesPath="$(ToXrmFrameworkWebresourcesAnalyzers)\$(JSOutputFolderPath)"/>
+	</Target>
+
+</Project>
