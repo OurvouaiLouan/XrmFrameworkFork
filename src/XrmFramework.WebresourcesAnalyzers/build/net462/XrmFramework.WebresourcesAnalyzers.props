@@ -1,5 +1,39 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+	<PropertyGroup>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<ToXrmFrameworkWebresourcesAnalyzers>..\..\..\..\XrmFramework.WebresourcesAnalyzers</ToXrmFrameworkWebresourcesAnalyzers>
+		<CompilerGeneratedFilesOutputPath>obj\GeneratedJson\XrmFramework.Analyzers\XrmFramework.Analyzers.Generators.TableJsonDefinitionGenerator</CompilerGeneratedFilesOutputPath>
+		<JSOutputFolderPath>DefinitionJS</JSOutputFolderPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\obj\**" />
+		<EmbeddedResource Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\obj\**" />
+		<None Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\..\JsonTests\**\*.table" />
+		<None Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\obj\**" />
+		<AdditionalFiles Include="$(ToXrmFrameworkWebresourcesAnalyzers)\..\JsonTests\**\*.table"
+						 Exclude="bin/**;obj/**" />
+
+		<Compile Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+
+		<Compile Remove="**/$(JSOutputFolderPath)" />
+
+		<Compile Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\obj\**" />
+		<None Include="**/$(JSOutputFolderPath)" />
+
+
+		<None Remove="$(ToXrmFrameworkWebresourcesAnalyzers)\$(CompilerGeneratedFilesOutputPath)\**" />
+		<None Include="$(ToXrmFrameworkWebresourcesAnalyzers)\$(JSOutputFolderPath)\*.js"/>
+
+		<None Include="$(ToXrmFrameworkWebresourcesAnalyzers)\Resources\*.table"/>
+
+
+
+
+	</ItemGroup>
+	
+	
 	<UsingTask TaskName="WebresourcesAnalyzers.PostBuildTask" 
 			   AssemblyFile="$(ToXrmFrameworkWebresourcesAnalyzers)/bin/Release/netstandard2.0/XrmFramework.WebresourcesAnalyzers.dll" />
 
