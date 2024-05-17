@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.Text;
 using XrmFramework.WebresourcesAnalyzers.Definitions;
 using XrmFramework.Core;
+using XrmFramework.Analyzers.Generators;
 
 namespace XrmFramework.WebresourcesAnalyzers.Generators;
 
