@@ -32,9 +32,7 @@
         <AdditionalFiles Include="Resources\SansEnum.table" />
         <Compile Include="..\XrmFramework\Utils\SdkEnums.cs" Link="XrmFramework.Core\SdkEnums.cs" />
 		<Compile Include="..\XrmFramework.Analyzers\Generators\BaseTableDefinitionGenerator.cs" Link="XrmFramework.Analyzers\BaseTableDefinitionGenerator.cs" />
-	</ItemGroup>
-
-    <ItemGroup>
+		
         <PackageReference Include="Microsoft.Build.Framework" Version="17.9.5" />
         <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.9.5" />
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3">
@@ -48,18 +46,12 @@
     <ItemGroup>
         <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
         <EmbeddedResource Update="Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
+		
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" PrivateAssets="all" GeneratePathProperty="true" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\XrmFramework.Analyzers\XrmFramework.Analyzers.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="DefinitionJS\" />
+		
+        <ProjectReference Include="..\XrmFramework.Analyzers\XrmFramework.Analyzers.csproj" />
+		
+        <Folder Include="DefinitionJS\" />
     </ItemGroup>
 
     <PropertyGroup>

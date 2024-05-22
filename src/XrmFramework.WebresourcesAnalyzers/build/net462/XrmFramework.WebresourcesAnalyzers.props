@@ -27,10 +27,6 @@
 		<None Include="$(ToXrmFrameworkWebresourcesAnalyzers)\$(JSOutputFolderPath)\*.js"/>
 
 		<None Include="$(ToXrmFrameworkWebresourcesAnalyzers)\Resources\*.table"/>
-
-
-
-
 	</ItemGroup>
 	
 	
