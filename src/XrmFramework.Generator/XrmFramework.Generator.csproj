@@ -39,9 +39,4 @@
   </ItemGroup>
 
 
-  <!--<ItemGroup>
-    <Compile Include="..\XrmFramework\**\*.cs" Link="_Imports\XrmFramework\%(RecursiveDir)%(Filename)%(Extension)" Exclude="..\XrmFramework\bin\**;..\XrmFramework\obj\**" />
-  </ItemGroup>-->
-
-
 </Project>
