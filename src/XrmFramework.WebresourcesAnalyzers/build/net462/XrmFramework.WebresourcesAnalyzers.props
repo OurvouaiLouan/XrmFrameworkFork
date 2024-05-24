@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-		<ToXrmFrameworkWebresourcesAnalyzers>..\..\..\..\XrmFramework.WebresourcesAnalyzers</ToXrmFrameworkWebresourcesAnalyzers>
+		<ToXrmFrameworkWebresourcesAnalyzers>$(MSBuildThisFileDirectory)../../../XrmFramework.WebresourcesAnalyzers</ToXrmFrameworkWebresourcesAnalyzers>
 		<CompilerGeneratedFilesOutputPath>obj\GeneratedJson\XrmFramework.Analyzers\XrmFramework.Analyzers.Generators.TableJsonDefinitionGenerator</CompilerGeneratedFilesOutputPath>
 		<JSOutputFolderPath>DefinitionJS</JSOutputFolderPath>
 	</PropertyGroup>
@@ -28,15 +28,14 @@
 
 		<None Include="$(ToXrmFrameworkWebresourcesAnalyzers)\Resources\*.table"/>
 	</ItemGroup>
-	
-	
-	<UsingTask TaskName="WebresourcesAnalyzers.PostBuildTask" 
-			   AssemblyFile="$(ToXrmFrameworkWebresourcesAnalyzers)/bin/Release/netstandard2.0/XrmFramework.WebresourcesAnalyzers.dll" />
 
-	<Target Name="Convert_JsonCs_to_Js" 
+	<UsingTask TaskName="WebresourcesAnalyzers.PostBuildTask"
+				AssemblyFile="$(ToXrmFrameworkWebresourcesAnalyzers)/bin/Release/netstandard2.0/XrmFramework.WebresourcesAnalyzers.dll" />
+
+	<Target Name="Convert_JsonCs_to_Js"
 			AfterTargets="Build">
-			<PostBuildTask FilesToConvertPath="$(ToXrmFrameworkWebresourcesAnalyzers)\$(CompilerGeneratedFilesOutputPath)" 
-						   ConvertedFilesPath="$(ToXrmFrameworkWebresourcesAnalyzers)\$(JSOutputFolderPath)"/>
+		<PostBuildTask FilesToConvertPath="$(ToXrmFrameworkWebresourcesAnalyzers)/Resources"
+					   ConvertedFilesPath="$(ToXrmFrameworkWebresourcesAnalyzers)/DefinitionJS"/>
 	</Target>
 
 </Project>

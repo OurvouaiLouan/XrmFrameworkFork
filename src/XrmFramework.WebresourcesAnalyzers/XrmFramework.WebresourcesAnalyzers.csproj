@@ -30,8 +30,10 @@
         <AdditionalFiles Include="Resources\*.table" />
         
         <AdditionalFiles Include="Resources\SansEnum.table" />
-        <Compile Include="..\XrmFramework\Utils\SdkEnums.cs" Link="XrmFramework.Core\SdkEnums.cs" />
-		<Compile Include="..\XrmFramework.Analyzers\Generators\BaseTableDefinitionGenerator.cs" Link="XrmFramework.Analyzers\BaseTableDefinitionGenerator.cs" />
+        <Compile Include="..\XrmFramework\Utils\SdkEnums.cs" 
+				 Link="XrmFramework.Core\SdkEnums.cs" />
+		<Compile Include="..\XrmFramework.Analyzers\Generators\BaseTableDefinitionGenerator.cs" 
+				 Link="XrmFramework.Analyzers\BaseTableDefinitionGenerator.cs" />
 		
         <PackageReference Include="Microsoft.Build.Framework" Version="17.9.5" />
         <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.9.5" />
@@ -41,9 +43,9 @@
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.1.0" />
         <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.1.0" />
-    </ItemGroup>
-
-    <ItemGroup>
+	
+	
+	
         <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
         <EmbeddedResource Update="Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
 		

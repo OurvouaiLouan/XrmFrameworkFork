@@ -9,6 +9,8 @@ public class PostBuildTask : Task
 {
 	[Required]
 	public string FilesToConvertPath { get; set; }
+
+    [Required]
     public string ConvertedFilesPath { get; set; }
 
     public override bool Execute()
