@@ -16,8 +16,10 @@
   </metadata>
 
   <files>
-    <file src="bin\$config$\netstandard2.0\*" target="analyzers\dotnet\cs" />
-    <file src="bin\$config$\netstandard2.0\XrmFramework.Analyzers.dll" target="contentFiles\cs\any\obj" />
+    <file src="bin\$config$\netstandard2.0\*" 
+		  target="analyzers\dotnet\cs" />
+    <file src="bin\$config$\netstandard2.0\XrmFramework.Analyzers.dll" 
+		  target="contentFiles\cs\any\obj" />
   </files>
 	
 </package>
