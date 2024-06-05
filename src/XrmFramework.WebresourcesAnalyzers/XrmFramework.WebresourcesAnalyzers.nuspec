@@ -20,6 +20,8 @@
 		  target="analyzers\dotnet\cs" />
     <file src="bin\$config$\netstandard2.0\XrmFramework.Analyzers.dll" 
 		  target="contentFiles\cs\any\obj" />
+    <file src="Resources\*" 
+		  target="contentFiles\cs\any\obj\Definition" />
   </files>
 	
 </package>
