@@ -26,8 +26,6 @@
 		  target="contentFiles\cs\any\obj\Definition" />
     <file src="Tasks\*" 
 		  target="contentFiles\cs\any\obj\Definition" />
-    <file src="XrmFramework.Analyzers\*" 
-		  target="contentFiles\cs\any\obj\Definition" />
   </files>
 	
 </package>
