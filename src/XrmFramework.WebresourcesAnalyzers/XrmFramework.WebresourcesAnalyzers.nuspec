@@ -14,18 +14,12 @@
     <tags>Dynamics365 CRM DynamicsCrm Dataverse PowerApps</tags>
     <copyright>$copyrigth$</copyright>
   </metadata>
-
+  
   <files>
-    <file src="bin\$config$\netstandard2.0\*" 
-		  target="analyzers\dotnet\cs" />
-    <file src="bin\$config$\netstandard2.0\XrmFramework.Analyzers.dll" 
-		  target="contentFiles\cs\any\obj" />
-    <file src="Resources\*" 
-		  target="contentFiles\cs\any\obj\Definition" />
-    <file src="Generators\*" 
-		  target="contentFiles\cs\any\obj\Definition" />
-    <file src="Tasks\*" 
-		  target="contentFiles\cs\any\obj\Definition" />
+    <file src="bin\$config$\netstandard2.0\*" target="analyzers\dotnet\cs" />
+    <file src="..\XrmFramework.WebresourcesAnalyzers.Tasks\bin\$config$\netstandard2.0\*" target="lib\tasks" />
+    <file src="build\**\*" target="build" />
+
+    <file src="$SolutionDir$\*.txt" target="" />
   </files>
-	
 </package>

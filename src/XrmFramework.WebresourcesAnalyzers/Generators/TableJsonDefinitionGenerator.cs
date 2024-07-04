@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
-using XrmFramework.WebresourcesAnalyzers.Definitions;
+using XrmFramework.Analyzers.Definitions;
 using XrmFramework.Core;
 using XrmFramework.Analyzers.Generators;
 

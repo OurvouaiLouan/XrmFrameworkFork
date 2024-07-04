@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
 
-namespace XrmFramework.WebresourcesAnalyzers.Definitions
+namespace XrmFramework.Analyzers.Definitions
 {
     internal class JsonDefinition
     {
