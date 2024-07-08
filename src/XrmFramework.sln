@@ -42,6 +42,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XrmFramework.Analyzers.Tests", "Tests\XrmFramework.Analyzers.Tests\XrmFramework.Analyzers.Tests.csproj", "{BAE6D2E6-0EDA-4115-9BD3-295229C2EF10}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XrmFramework.WebresourcesAnalyzers", "XrmFramework.WebresourcesAnalyzers\XrmFramework.WebresourcesAnalyzers.csproj", "{F1E1C680-0FA1-4AA8-A67D-04C2D55F4FE7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D71AEF5D-89A4-49CD-A459-00FAFCE8BBEA} = {D71AEF5D-89A4-49CD-A459-00FAFCE8BBEA}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonTests", "JsonTests\JsonTests.csproj", "{E0635D33-4B05-478E-9F19-862CD63412CA}"
 EndProject
