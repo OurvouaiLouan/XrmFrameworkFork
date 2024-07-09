@@ -19,7 +19,6 @@
     <file src="bin\$config$\netstandard2.0\*" target="analyzers\dotnet\cs" />
     <file src="..\XrmFramework.WebresourcesAnalyzers.Tasks\bin\$config$\netstandard2.0\*" target="lib\tasks" />
     <file src="build\**\*" target="build" />
-
     <file src="$SolutionDir$\*.txt" target="" />
   </files>
 </package>
