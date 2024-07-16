@@ -2047,6 +2047,32 @@
         }
       ],
       "HasNullValue": true
+    },
+    {
+      "LogName": "account|queltype",
+      "Name": "QuelsTypes?",
+      "Values": [
+        {
+          "Value": 100000000,
+          "Name": "Action",
+          "Labels": [
+            {
+              "Label": "Pacte d'actionnaire",
+              "LangId": 1036
+            }
+          ]
+        },
+        {
+          "Value": 100000001,
+          "Name": "Donation",
+          "Labels": [
+            {
+              "Label": "Donation",
+              "LangId": 1036
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -57,7 +57,7 @@ public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
         /*
          * On crée le chemin pour cette table
          */
-        productionContext.AddSource($"{ParseName(table.Name)}Definition.json",
+        productionContext.AddSource($"{ParseName(table.Name)}Definition",
             SourceText.From(sb.ToString(), System.Text.Encoding.UTF8));
     }
 
