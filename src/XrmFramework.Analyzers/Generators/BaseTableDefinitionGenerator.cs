@@ -4,17 +4,11 @@ using XrmFramework.Core;
 
 namespace XrmFramework.Analyzers.Generators;
 
-[Generator("json")]
+[Generator]
 public abstract class BaseTableDefinitionGenerator : IIncrementalGenerator
 {
-	protected abstract bool GenerateTableFiles { get; }
 	public void Initialize(IncrementalGeneratorInitializationContext context)
 	{
-		if(!GenerateTableFiles)
-		{
-			return;
-		}
-		
 		var namesAndContents =
 			context.AdditionalTextsProvider
 			   .Where(a => a.Path.EndsWith(".table"))

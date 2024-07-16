@@ -11,23 +11,18 @@ public class MoveGeneratedJson : Task
 
     public override bool Execute()
     {
-        if (FilesToConvertPath == null || ConvertedFilesPath == null) return false;
-
         if (!Directory.Exists(ConvertedFilesPath)) Directory.CreateDirectory(ConvertedFilesPath);
         
-        Log.LogMessage("Task successfully executed.");
         Log.LogMessage($"Files To Convert : {FilesToConvertPath}");
-        Log.LogMessage($"Converted Files : {ConvertedFilesPath}");
-
-
+        
         Log.LogMessage($"___Input Files___");
-        string[] files = Directory.GetFiles(FilesToConvertPath);
-        int index = 0;
-        foreach (string file in files)
+        var files = Directory.GetFiles(FilesToConvertPath);
+        var index = 0;
+        foreach (var file in files)
         {
             index++;
             Log.LogMessage($"Input File {index}: {file}");
-            string pathOutput = $"{ConvertedFilesPath}/{file.Split('\\').Last().Split('.').First()}.js";
+            var pathOutput = $"{ConvertedFilesPath}/{file.Split('\\').Last().Split('.').First()}.js";
             var rawContent = File.ReadAllLines(file);
             var listRawContent = rawContent.ToList();
             listRawContent.RemoveAt(0);
@@ -36,18 +31,17 @@ public class MoveGeneratedJson : Task
             File.WriteAllLines(pathOutput, contentOutput);
         }
 
-
+        Log.LogMessage($"Converted Files : {ConvertedFilesPath}");
         Log.LogMessage($"___Output Files___");
 
         files = Directory.GetFiles(ConvertedFilesPath);
         index = 0;
-        foreach (string file in files)
+        foreach (var file in files)
         {
             index++;
             Log.LogMessage($"Output File {index}: {file}");
         }
-
-
+        
         return true;
     }
 }

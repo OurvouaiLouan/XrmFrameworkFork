@@ -9,8 +9,6 @@ namespace XrmFramework.WebresourcesAnalyzers.Generators;
 [Generator]
 public class TableJsonDefinitionGenerator : BaseTableDefinitionGenerator
 {
-    protected override bool GenerateTableFiles => true;
-
     protected override void WriteTable(SourceProductionContext productionContext, TableCollection tables, Table table,
         HashSet<string> alreadyCreatedEnums)
     {

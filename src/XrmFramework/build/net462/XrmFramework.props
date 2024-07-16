@@ -1,19 +1,7 @@
 ﻿<Project>
 
-	<ItemGroup>
-		<ProjectReference Include="..\XrmFramework.WebresourcesAnalyzers\XrmFramework.Analyzers.csproj" 
-						  OutputItemType="Analyzer" 
-						  ReferenceOutputAssembly="false" />
+    <ItemGroup>
         <Compile Include="obj\LoggedServices\*.cs" />
     </ItemGroup>
-
-
-	<PropertyGroup>
-		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-	</PropertyGroup>
-
-
-	
-
 
 </Project>
